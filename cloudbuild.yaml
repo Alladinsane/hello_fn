@@ -18,6 +18,7 @@ steps:
       - --entry-point=hello
       - --trigger-http
       - --service-account=hello-runtime@$PROJECT_ID.iam.gserviceaccount.com
+      - --build-service-account=projects/$PROJECT_ID/serviceAccounts/fn-builder@$PROJECT_ID.iam.gserviceaccount.com
 
 options:
   logging: CLOUD_LOGGING_ONLY
