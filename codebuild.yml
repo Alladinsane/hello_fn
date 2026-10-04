@@ -1,0 +1,23 @@
+steps:
+  # Install dependencies exactly as locked
+  - name: 'node:22'
+    entrypoint: npm
+    args: ['ci']
+
+  # Deploy the function
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    entrypoint: gcloud
+    args:
+      - functions
+      - deploy
+      - hello
+      - --gen2
+      - --runtime=nodejs22
+      - --region=us-central1
+      - --source=.
+      - --entry-point=hello
+      - --trigger-http
+      - --service-account=hello-runtime@$PROJECT_ID.iam.gserviceaccount.com
+
+options:
+  logging: CLOUD_LOGGING_ONLY
