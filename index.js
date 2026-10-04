@@ -1,3 +1,5 @@
+const functions = require('@google-cloud/functions-framework');
+
 functions.http('hello', (req, res) => {
     if (req.query.fail) {
       console.log(JSON.stringify({ severity: "ERROR", message: "Forced failure" }));
