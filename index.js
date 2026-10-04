@@ -1,8 +1,7 @@
-const functions = require('@google-cloud/functions-framework');
-
 functions.http('hello', (req, res) => {
-  res.json({
-    message: `Hello, ${req.query.name?.charAt(0).toUpperCase() + req.query.name?.slice(1) || 'world'}, I was deployed by Github Action! Definitively.`,
-    revision: process.env.K_REVISION,  // set by Cloud Run
+    if (req.query.fail) {
+      console.log(JSON.stringify({ severity: "ERROR", message: "Forced failure" }));
+      return res.status(500).json({ error: "forced failure" });
+    }
+    res.json({ message: `Hello, ${req.query.name || 'world'}`, revision: process.env.K_REVISION });
   });
-});
