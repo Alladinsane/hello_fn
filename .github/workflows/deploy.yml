@@ -20,9 +20,12 @@ jobs:
 
       - uses: google-github-actions/setup-gcloud@v2
 
+      - run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
       - run: |
-          gcloud functions deploy hello \
-            --gen2 --runtime=nodejs22 --region=us-central1 \
-            --source=. --entry-point=hello --trigger-http \
-            --service-account=hello-runtime@local-public-510420.iam.gserviceaccount.com \
-            --build-service-account=projects/local-public-510420/serviceAccounts/fn-builder@local-public-510420.iam.gserviceaccount.com
+          IMAGE=us-central1-docker.pkg.dev/local-public-510420/apps/hello:${{ github.sha }}
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
+          gcloud run deploy hello-svc \
+            --image="$IMAGE" --region=us-central1 \
+            --service-account=hello-runtime@local-public-510420.iam.gserviceaccount.com
